@@ -22,8 +22,14 @@ export const get = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
   try {
-    const feedbackId = req.params.id; // Assuming the feedback ID is passed in the URL params
+    const { id } = req.params; // Assuming the feedback ID is passed in the URL params
     const { title, category, detail, updateStatus } = req.body;
+
+    if (!title || !category || !detail) {
+      return res
+        .status(400)
+        .json({ error: "Title, category, and detail are required" });
+    }
 
     const updatedFields: Partial<IFeedback> = { title, category, detail };
     if (updateStatus !== undefined) {
@@ -31,7 +37,7 @@ export const update = async (req: Request, res: Response) => {
     }
 
     const updatedFeedback = await FeedbackModel.findByIdAndUpdate(
-      feedbackId,
+      id,
       updatedFields,
       { new: true }
     );

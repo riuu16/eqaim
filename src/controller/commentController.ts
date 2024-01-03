@@ -5,12 +5,12 @@ import FeedbackModel, { IFeedback } from "../model/feedback";
 export const create = async (req: Request, res: Response) => {
   try {
     const { description, name } = req.body;
-
+    const { feedbackId } = req.params;
     const newComment = await CommentModel.create({
       description,
       name,
+      feedbackID: feedbackId,
     });
-
     res.status(201).json(newComment);
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });
